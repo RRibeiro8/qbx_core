@@ -5,7 +5,11 @@ return {
     pauseMapText = 'Powered by Qbox', -- Text shown above the map when ESC is pressed. If left empty 'FiveM' will appear
 
     characters = {
-        useExternalCharacters = false, -- Whether you have an external character management resource. (If true, disables the character management inside the core)
+        useExternalCharacters = true, -- Whether you have an external character management resource. (If true, disables the character management inside the core)
+        -- RIVER CITY: true so rr_multichar owns the character screen.
+        -- Tracked on the `rivercity` branch of this resource's own repo, on top
+        -- of upstream v1.24.0. A recipe re-run reverts this file; `git status`
+        -- here shows it, `git checkout -- config/client.lua` puts it back.
         enableDeleteButton = true, -- Whether players should be able to delete characters themselves.
         startingApartment = true, -- If set to false, skips apartment choice in the beginning (requires qbx_spawn if true)
 
