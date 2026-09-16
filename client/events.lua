@@ -219,9 +219,15 @@ end)
 RegisterNetEvent('qbx_core:client:setVehicleProperties', function(netId, props)
     if not props then return end
     local timeOut = GetGameTimer() + config.setVehicleProperties.timeout
-    local vehicle = NetworkGetEntityFromNetworkId(netId)
     while true do
-        if NetworkGetEntityOwner(vehicle) == cache.playerId then
+        -- RIVER CITY: look the vehicle up on EVERY attempt, not once up front.
+        -- The server sends this as soon as it sees us own the vehicle, but on
+        -- Enhanced our client only creates it 50-170ms later (measured). A
+        -- handle resolved at arrival was 0, stayed 0, the plate was never set,
+        -- and qbx.spawnVehicle deleted the vehicle after 1 s - three times, for
+        -- every garage retrieval and shop delivery on the server.
+        local vehicle = NetworkDoesNetworkIdExist(netId) and NetworkGetEntityFromNetworkId(netId) or 0
+        if vehicle ~= 0 and DoesEntityExist(vehicle) and NetworkGetEntityOwner(vehicle) == cache.playerId then
             if lib.setVehicleProperties(vehicle, props) then
                 return
             end
